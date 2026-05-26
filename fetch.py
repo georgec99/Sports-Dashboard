@@ -1,8 +1,8 @@
 import requests as r
 from tabulate import tabulate as tbl
-import requests as r
 from dotenv import load_dotenv
 import os
+import db.standings_tbl as standingsTbl
 
 load_dotenv()
 
@@ -28,11 +28,10 @@ def main():
         f"{BASE_API_URL}/competitions/{compId}/standings", headers=headers
         )
     data = response.json()
-    print(data)
 
-    standings = data["standings"][0]["table"]
+    standings_data = data["standings"][0]["table"]
     rows = []
-    for team in standings:
+    for team in standings_data:
         rows.append([
             team["position"],
             team["team"]["shortName"],
@@ -50,7 +49,12 @@ def main():
 
     finalTbl = tbl(rows, headers=tabHeaders, tablefmt="rounded_outline" )
     
-    #return finalTbl
+    standingsTbl.createTbl()
+    standingsTbl.saveStandings("PL",standings_data)
+    rowsFromDB = standingsTbl.getLatestStandings("PL")
+    print(f"Rows saved to database: {len(rowsFromDB)}")
+
+    return finalTbl
 
 print(main())
 
