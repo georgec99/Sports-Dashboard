@@ -76,5 +76,24 @@ def saveStandings(competition_code, standings_data):
     conn.commit()
     conn.close()
 
-    print(f"Saved {len(standings_data)} teams to standings.")          
+    print(f"Saved {len(standings_data)} teams to standings.")
+
+def getLatestStandings(competition_code):
+    conn = getConnection()
+    cur = conn.cursor()
+
+    cur.execute(("""
+        SELECT * FROM standings
+        WHERE competition_code = ?
+        AND snapshot_date = (SELECT MAX(snapshot_date) FROM standings
+                            WHERE competition_code = ?)
+        ORDER BY position
+                """),(competition_code, competition_code))
+    
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+    
+
+
         
