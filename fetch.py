@@ -1,10 +1,14 @@
 import requests as r
 from tabulate import tabulate as tbl
+import requests as r
+from dotenv import load_dotenv
+import os
 
-API_KEY = ""
+load_dotenv()
+
+API_KEY = os.getenv("API_KEY")
 BASE_API_URL = "https://api.football-data.org/v4"
-
-headers = { 'X-Auth-Token': API_KEY }
+headers = {"X-Auth-Token": API_KEY}
 
 def fetchCompID(compCode):
     response = r.get(
@@ -24,6 +28,7 @@ def main():
         f"{BASE_API_URL}/competitions/{compId}/standings", headers=headers
         )
     data = response.json()
+    print(data)
 
     standings = data["standings"][0]["table"]
     rows = []
@@ -45,7 +50,7 @@ def main():
 
     finalTbl = tbl(rows, headers=tabHeaders, tablefmt="rounded_outline" )
     
-    return finalTbl
+    #return finalTbl
 
 print(main())
 
