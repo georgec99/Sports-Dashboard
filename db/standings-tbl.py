@@ -34,6 +34,47 @@ def saveStandings(competition_code, standings_data):
     conn = getConnection()
     cur = conn.cursor()
 
-    tdyDate = str(date.today())
-    for team in standings_data
-        cur.execute("INSERT INTO standings (competition_code, snapshot_date") VALUES (,)
+    tdyDate = str(date.today())  
+
+    for team in standings_data:
+
+        tblValues=(
+            tdyDate,
+            competition_code,
+            team["position"],
+            team["team"]["name"],
+            team["team"]["shortName"],
+            team["playedGames"],
+            team["won"],
+            team["draw"],
+            team["lost"],
+            team["goalsFor"],
+            team["goalsAgainst"],
+            team["goalDifference"],
+            team["points"]
+            )
+        placeholders = ", ".join(["?"] * len(tblValues))
+           
+        cur.execute(f"""
+        INSERT INTO standings (
+            snapshot_date,
+            competition_code,
+            position,
+            team_name,
+            team_short_name,
+            played,
+            won,
+            drawn,
+            lost,
+            goals_for,
+            goals_against,
+            goal_difference,
+            points
+        ) VALUES ({placeholders})
+        """,tblValues)
+
+    conn.commit()
+    conn.close()
+
+    print(f"Saved {len(standings_data)} teams to standings.")          
+        
