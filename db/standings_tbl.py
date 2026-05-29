@@ -82,13 +82,13 @@ def getLatestStandings(competition_code):
     conn = getConnection()
     cur = conn.cursor()
 
-    cur.execute(("""
+    cur.execute("""
         SELECT * FROM standings
         WHERE competition_code = ?
         AND snapshot_date = (SELECT MAX(snapshot_date) FROM standings
                             WHERE competition_code = ?)
         ORDER BY position
-                """),(competition_code, competition_code))
+                """,(competition_code, competition_code))
     
     rows = cur.fetchall()
     conn.close()
