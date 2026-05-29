@@ -20,17 +20,33 @@ def fetchCompID(compCode):
             return comptetiton["id"]
     return None
 
+def fetchData(compCode):
+    compId = fetchCompID(compCode)
+
+    standings = (r.get(
+        f"{BASE_API_URL}/competitions/{compId}/standings", headers=headers
+        )
+    ).json()
+
+    scorers = (r.get(
+        f"{BASE_API_URL}/competitions/{compId}/scorers", headers=headers
+        )
+    ).json()
+
+    matches = (r.get(
+        f"{BASE_API_URL}/competitions/{compId}/matches", headers=headers
+        )
+    ).json()
+
+    return {
+        "standings": standings["standings"][0]["table"],
+        "scorers" : scorers["scorers"],
+        "matches" : matches["matches"]
+    }
 
 def main():
 
-    compId = fetchCompID("PL")
-    response = r.get(
-        f"{BASE_API_URL}/competitions/{compId}/standings", headers=headers
-        )
-    data = response.json()
-
-    standings_data = data["standings"][0]["table"]
-    scorers_data = data["scorers"]
+    s
     rows = []
     for team in standings_data:
         rows.append([
