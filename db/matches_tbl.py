@@ -32,7 +32,7 @@ def createTbl():
 
     conn.commit()
     conn.close()
-    print("Matches Tables Created")
+    print("Matches Table Created")
 
 
 def savematches(competition_code, matches_data):
@@ -78,7 +78,7 @@ def savematches(competition_code, matches_data):
     conn.commit()
     conn.close()
 
-    print(f"Saved {len(matches_data)} teams to matches.")
+    print(f"Saved {len(matches_data)} results to matches.")
 
 def getLatestMatches(competition_code):
     conn = getConnection()

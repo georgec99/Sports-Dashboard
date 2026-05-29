@@ -27,7 +27,7 @@ def createTbl():
 
     conn.commit()
     conn.close()
-    print("Standings Tables Created")
+    print("Standings Table Created")
 
 
 def saveStandings(competition_code, standings_data):

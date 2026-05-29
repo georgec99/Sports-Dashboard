@@ -24,13 +24,14 @@ def createTbl():
             played_matches INTEGER,
             goals_scored INTEGER,
             assists INTEGER,
-            penalties INTEGER 
+            penalties INTEGER,
+            UNIQUE(snapshot_date, competition_code, player_name)
         )
     """)
 
     conn.commit()
     conn.close()
-    print("Scorers Tables Created")
+    print("Scorers Table Created")
 
 
 def saveScorers(competition_code, scorers_data):
@@ -64,12 +65,13 @@ def saveScorers(competition_code, scorers_data):
             assists,
             penalties 
         ) VALUES ({placeholders})
+        ON CONFLICT (snapshot_date, competition_code, player_name) DO NOTHING
         """,tblValues)
 
     conn.commit()
     conn.close()
 
-    print(f"Saved {len(scorers_data)} teams to scorers.")
+    print(f"Saved {len(scorers_data)} players to scorers.")
 
 def getLatestScorers(competition_code):
     conn = getConnection()

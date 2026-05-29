@@ -3,6 +3,9 @@ from tabulate import tabulate as tbl
 from dotenv import load_dotenv
 import os
 import db.standings_tbl as standingsTbl
+import db.scorers_tbl as scorersTbl
+import db.matches_tbl as matchesTbl
+
 
 load_dotenv()
 
@@ -46,9 +49,15 @@ def fetchData(compCode):
 
 def main():
 
-    s
+    data = fetchData("PL")
+
+    standingsData = data["standings"]
+    scorersData = data["scorers"]
+    matchesData = data["matches"]
+
+
     rows = []
-    for team in standings_data:
+    for team in standingsData:
         rows.append([
             team["position"],
             team["team"]["shortName"],
@@ -67,9 +76,15 @@ def main():
     finalTbl = tbl(rows, headers=tabHeaders, tablefmt="rounded_outline" )
     
     standingsTbl.createTbl()
-    standingsTbl.saveStandings("PL",standings_data)
+    standingsTbl.saveStandings("PL",standingsData)
     rowsFromDB = standingsTbl.getLatestStandings("PL")
     print(f"Rows saved to database: {len(rowsFromDB)}")
+
+    scorersTbl.createTbl()
+    scorersTbl.saveScorers("PL", scorersData)
+
+    matchesTbl.createTbl()
+    matchesTbl.savematches("PL", matchesData)
 
     return finalTbl
 
